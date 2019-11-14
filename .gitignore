@@ -1,0 +1,18 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.war
+*.iml
+
+.idea
+.project
+.classpath
+target/
+.settings
+.springBeans
+
+/bin/

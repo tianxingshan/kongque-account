@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="logback.rootPath" value="../projectLogs/kongque-account/" />
+	<!-- 控制台输出 -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				[%-5level] %d{HH:mm:ss.SSS} %logger{80} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<!-- 按照每天生成日志文件 -->
+	<appender name="file"
+		class="com.kongque.component.impl.MyLogbackWriter">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>
+				../projectLogs/kongque-account/basic-%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>
+				[%-5level] %d{HH:mm:ss.SSS} %logger{80} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+		<discardingThreshold>0</discardingThreshold>
+		<!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+		<queueSize>10</queueSize>
+		<!-- 添加附加的appender,最多只能添加一个 -->
+		<appender-ref ref="file" />
+	</appender>
+	
+	<!-- 按照每天生成日志文件 -->
+	<appender name="p6spy"
+		class="com.kongque.component.impl.MyLogbackWriter">
+		<!-- <encoding>UTF-8</encoding> -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>
+				../projectLogs/kongque-account/p6spy/p6spy-%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>
+				[%-5level] %d{HH:mm:ss.SSS} %logger{80} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="ASYNC_P6SPY" class="ch.qos.logback.classic.AsyncAppender">
+		<!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+		<discardingThreshold>0</discardingThreshold>
+		<!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+		<queueSize>10</queueSize>
+		<!-- 添加附加的appender -->
+		<appender-ref ref="p6spy" />
+	</appender>
+	
+	<logger additivity="true" name="org" level="ERROR">
+		<appender-ref ref="ASYNC_FILE" />
+	</logger>
+	<logger additivity="true" name="com" level="INFO">
+		<appender-ref ref="ASYNC_FILE" />
+	</logger>
+	<logger additivity="true" name="org.apache" level="INFO">
+		<appender-ref ref="ASYNC_FILE" />
+	</logger>
+	<logger additivity="true" name="net" level="ERROR">
+		<appender-ref ref="ASYNC_FILE" />
+	</logger>
+	
+	<logger additivity="false" name="p6spyLogger" level="INFO">
+		<appender-ref ref="ASYNC_P6SPY" />
+	</logger>
+
+	<root level="INFO">
+		<springProfile name="dev">
+			<appender-ref ref="console" />
+		</springProfile>
+	</root>
+
+</configuration> 

@@ -1,0 +1,16 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd">
+        <!--此文件可以不写，使用默认的配置-->
+          <!--如果缓存中的对象存储超过指定的缓存数量的对象存储的磁盘地址 
+              <diskStore path="D:/ehcache"/> 
+                <diskStore path="java.io.tmpdir"/> 
+          --> 
+          <!-- 默认cache：如果没有对应的特定区域的缓存，就使用默认缓存 -->  
+          <defaultCache maxElementsInMemory="100000"
+                        eternal="false"
+                        timeToIdleSeconds="60"
+                        timeToLiveSeconds="60"
+                        overflowToDisk="false"
+        />   
+
+</ehcache>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+		">
+	<context:property-placeholder location="classpath:bootstrap.properties" />
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+
+	</bean>
+	<!-- 配置redis客户端单机版 -->
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg name="poolConfig" ref="jedisPoolConfig" />
+		<constructor-arg name="host" value="${redis.host}"></constructor-arg>
+		<constructor-arg name="port" value="${redis.port}"></constructor-arg>
+		<constructor-arg name="timeout" value="${redis.timeout}"></constructor-arg>
+		<constructor-arg name="password" value="${redis.password}"></constructor-arg>
+	</bean>
+	<!-- 配置redis客户端实现类 -->
+	<bean id="redisClient" class="com.kongque.component.impl.RedisClientSingleImpl" />
+
+	<!-- spring redis -->
+	<bean id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="usePool" value="true"></property>
+		<property name="hostName" value="${redis.host}" />
+		<property name="port" value="${redis.port}" />
+		<property name="password" value="${redis.password}" />
+		<property name="timeout" value="${redis.timeout}"></property>
+	</bean>
+	<!-- spring redis 序列化 -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="jedisConnectionFactory"></property>
+		<property name="keySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="hashKeySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+		<property name="hashValueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+	</bean>
+	<!-- 配置redis客户端集群版 -->
+	<!-- <bean id="jedisClient" class="redis.clients.jedis.JedisCluster"> <constructor-arg> 
+		<set> <bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host" 
+		value="127.0.0.1" /> <constructor-arg name="port" value="7001" /> </bean> 
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host" 
+		value="127.0.0.1" /> <constructor-arg name="port" value="7002" /> </bean> 
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host" 
+		value="127.0.0.1" /> <constructor-arg name="port" value="7003" /> </bean> 
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host" 
+		value="127.0.0.1" /> <constructor-arg name="port" value="7004" /> </bean> 
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host" 
+		value="127.0.0.1" /> <constructor-arg name="port" value="7005" /> </bean> 
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host" 
+		value="127.0.0.1" /> <constructor-arg name="port" value="7006" /> </bean> 
+		</set> </constructor-arg> </bean> <bean id="redisClient" class="com.kongque.component.impl.RedisClientClusterImpl" 
+		/> -->
+</beans>
