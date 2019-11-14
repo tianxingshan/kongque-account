@@ -22,7 +22,7 @@
 		<!-- <spring.version>5.0.2.RELEASE</spring.version> -->
 		<spring-cloud.version>Edgware.SR3</spring-cloud.version>
 		<lcn.last.version>4.1.0</lcn.last.version>
-		<netty.version>4.0.27.Final</netty.version>
+		<netty.version>4.1.42.Final</netty.version>
 	</properties>
 
 	<profiles>
